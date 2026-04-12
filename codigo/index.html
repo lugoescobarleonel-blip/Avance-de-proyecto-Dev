@@ -1,0 +1,63 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestor de Tareas</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header>
+    <div class="top">
+      <h2>📘 Gestor de Tareas</h2>
+
+      <div class="pill">
+        <strong>Vista:</strong>
+        <div class="seg" aria-label="selector vista">
+          <button id="btnProfesor" class="active" type="button">Profesor</button>
+          <button id="btnAlumno" type="button">Alumno</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="filters">
+        <button class="active" data-estado="todas" type="button">Todas</button>
+        <button data-estado="pendiente" type="button">Pendientes</button>
+        <button data-estado="entregada" type="button">Entregadas</button>
+        <button data-estado="revisada" type="button">Revisadas</button>
+      </div>
+
+      <div class="toolbar">
+        <input id="buscar" placeholder="Buscar por texto (nombre/descr.)" />
+        <select id="filtroAlumno"></select>
+      </div>
+
+      <section id="lista"></section>
+    </main>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modalOverlay" id="modalOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3 id="modalTitle">Modal</h3>
+      <div id="modalBody"></div>
+      <div class="footer">
+        <button id="modalCancel" class="btn2" type="button">Cancelar</button>
+        <button id="modalOk" class="btn" type="button">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script defer src="app.js"></script>
+</body>
+</html>
+  

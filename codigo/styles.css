@@ -1,0 +1,77 @@
+/* styles.css */
+*{box-sizing:border-box;font-family:Segoe UI,Tahoma,sans-serif}
+body{margin:0;background:#f4f7fb}
+header{background:#fff;padding:16px;border-bottom:1px solid #e5e7eb}
+header .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header h2{margin:0;font-size:18px}
+
+.container{display:flex;gap:20px;padding:20px;max-width:1200px;margin:0 auto}
+.sidebar,.main{background:#fff;border-radius:12px;padding:20px;box-shadow:0 4px 12px rgba(0,0,0,.05)}
+.sidebar{width:340px}
+.main{flex:1}
+
+label{font-weight:600;margin-top:10px;display:block}
+input,select,textarea{
+  width:100%;padding:8px;margin-top:4px;border-radius:8px;border:1px solid #d1d5db;background:#fff
+}
+textarea{min-height:90px;resize:vertical}
+
+button{padding:10px;border-radius:8px;border:none;cursor:pointer;font-weight:600}
+.btn{background:#4f46e5;color:#fff}
+.btn:active{transform:translateY(1px)}
+.btn2{background:#e5e7eb;color:#111827}
+.btnDanger{background:#e11d48;color:#fff}
+
+.filters{display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap}
+.filters button{flex:1;min-width:140px;background:#e5e7eb;color:#111827}
+.filters button.active{background:#111827;color:#fff}
+
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.toolbar input{flex:1;min-width:220px}
+
+.task{border:1px solid #e5e7eb;border-radius:12px;padding:15px;margin-bottom:12px}
+.badges{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.badge{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid #e5e7eb;background:#f9fafb}
+.materia{background:#dcfce7;border-color:#bbf7d0}
+.estado.pendiente{background:#fff7ed;border-color:#fed7aa}
+.estado.entregada{background:#eff6ff;border-color:#bfdbfe}
+.estado.revisada{background:#ecfdf5;border-color:#bbf7d0}
+.prioridad.alta{background:#fee2e2;border-color:#fecaca}
+.prioridad.media{background:#fef3c7;border-color:#fde68a}
+.prioridad.baja{background:#e0f2fe;border-color:#bae6fd}
+
+.actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.actions button{flex:1;min-width:140px}
+.editar{background:#facc15;color:#111827}
+.calificar{background:#16a34a;color:#fff}
+.entregar{background:#2563eb;color:#fff}
+.eliminar{background:#e11d48;color:#fff}
+
+.small{font-size:12px;color:#6b7280;margin:6px 0 0}
+.hr{height:1px;background:#e5e7eb;margin:14px 0}
+.pill{
+  display:inline-flex;gap:8px;align-items:center;
+  padding:8px 10px;border:1px solid #e5e7eb;border-radius:999px;background:#fff
+}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{padding:8px 10px;border-radius:999px;border:1px solid #e5e7eb;background:#fff}
+.seg button.active{background:#111827;color:#fff;border-color:#111827}
+
+.modalOverlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);
+  display:none;align-items:center;justify-content:center;padding:16px;z-index:999
+}
+.modal{
+  width:min(560px,100%);background:#fff;border-radius:12px;
+  padding:16px;box-shadow:0 20px 50px rgba(0,0,0,.2)
+}
+.modal h3{margin:0 0 8px}
+.modal .row{display:flex;gap:10px;flex-wrap:wrap}
+.modal .row > *{flex:1;min-width:180px}
+.modal .footer{display:flex;gap:10px;margin-top:12px}
+.modal .footer button{flex:1}
+
+@media(max-width:900px){
+  .container{flex-direction:column}
+  .sidebar{width:100%}
+}
