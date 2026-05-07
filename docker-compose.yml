@@ -1,0 +1,14 @@
+services:
+  gestor-tareas:
+    build: .
+    container_name: gestor-tareas
+    ports:
+      - "8080:80"
+    volumes:
+      - ./logs:/var/log/nginx
+    networks:
+      - devops-net
+
+networks:
+  devops-net:
+    driver: bridge
