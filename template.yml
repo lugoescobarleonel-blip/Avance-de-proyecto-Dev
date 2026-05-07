@@ -1,29 +1,63 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Infraestructura básica para gestor de tareas en EC2
+Description: Infraestructura para desplegar una aplicacion web en EC2 con CloudFormation
 
 Resources:
-  MiInstanciaEC2:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType: t2.micro
-      ImageId: ami-0c02fb55956c7d316  # Amazon Linux (puede variar por región)
-      SecurityGroupIds:
-        - !Ref MiSecurityGroup
-      Tags:
-        - Key: Name
-          Value: Gestor-Tareas-EC2
-
   MiSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Permitir acceso HTTP y SSH
+      GroupDescription: Permitir acceso HTTP
       SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
-          
+      Tags:
+        - Key: Name
+          Value: SG-Proyecto-DevOps
+
+  MiInstanciaEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-0eb38b817b93460ac
+      SecurityGroupIds:
+        - !Ref MiSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+
+          if command -v dnf >/dev/null 2>&1; then
+            dnf update -y
+            dnf install -y nginx git
+          else
+            yum update -y
+            amazon-linux-extras install nginx1 -y || yum install -y nginx git
+          fi
+
+          systemctl enable nginx
+          systemctl start nginx
+
+          cd /tmp
+          git clone https://github.com/lugoescobarleonel-blip/Avance-de-proyecto-Dev.git
+
+          cp /tmp/Avance-de-proyecto-Dev/index.html /usr/share/nginx/html/index.html
+          cp /tmp/Avance-de-proyecto-Dev/styles.css /usr/share/nginx/html/styles.css || true
+          cp /tmp/Avance-de-proyecto-Dev/app.js /usr/share/nginx/html/app.js || true
+
+          systemctl restart nginx
+      Tags:
+        - Key: Name
+          Value: Gestor-Tareas-DevOps-EC2
+
+Outputs:
+  InstanceId:
+    Description: ID de la instancia EC2 creada
+    Value: !Ref MiInstanciaEC2
+
+  PublicIP:
+    Description: IP publica de la instancia EC2
+    Value: !GetAtt MiInstanciaEC2.PublicIp
+
+  WebsiteURL:
+    Description: URL de la aplicacion desplegada
+    Value: !Sub "http://${MiInstanciaEC2.PublicIp}"
