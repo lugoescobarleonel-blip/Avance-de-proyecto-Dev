@@ -2,12 +2,18 @@ pipeline {
     agent any
 
     environment {
-        // Puedes cambiar el nombre de la imagen si prefieres algo como "node-app"
         IMAGE_NAME = "mi-proyecto-app"
         CONTAINER_NAME = "mi-contenedor-app"
     }
 
     stages {
+        stage('Limpieza de Disco') {
+            steps {
+                // Previene el error de "espacio bajo" que vimos en tus capturas
+                sh 'docker image prune -f'
+            }
+        }
+
         stage('Clonar repositorio') {
             steps {
                 checkout scm
@@ -16,7 +22,6 @@ pipeline {
 
         stage('Construir imagen Docker') {
             steps {
-                // CAMBIO CLAVE: Se usa '.' porque tu app.js y Dockerfile están en la raíz
                 sh 'docker build --no-cache -t $IMAGE_NAME .'
             }
         }
@@ -25,26 +30,27 @@ pipeline {
             steps {
                 sh 'docker stop $CONTAINER_NAME || true'
                 sh 'docker rm $CONTAINER_NAME || true'
-                
-                // Si tu app de Node usa otro puerto (ej. 3000), cambia el primer 5000:
-            sh 'docker run -d --name $CONTAINER_NAME -p 80:80 $IMAGE_NAME'            }
+                // Mapeo 80 de la instancia al 80 del contenedor (Nginx)
+                sh 'docker run -d --name $CONTAINER_NAME -p 80:80 $IMAGE_NAME'
+            }
         }
 
         stage('Validar despliegue') {
             steps {
                 sh 'docker ps'
                 sleep 5
-                sh 'curl --max-time 5 http://localhost:5000/ || true'
+                // Validamos contra el puerto 80 que es donde vive Nginx
+                sh 'curl --max-time 5 http://localhost:80/ || true'
             }
         }
     }
 
     post {
         success {
-            echo '¡Despliegue automático exitoso!'
+            echo '¡Despliegue automático exitoso! Revisa http://3.89.229.156'
         }
         failure {
-            echo 'El pipeline falló. Revisa el Console Output.'
+            echo 'El pipeline falló. Revisa el Console Output para ver si es falta de espacio.'
         }
     }
 }
