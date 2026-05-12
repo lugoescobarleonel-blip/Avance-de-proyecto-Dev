@@ -27,8 +27,7 @@ pipeline {
                 sh 'docker rm $CONTAINER_NAME || true'
                 
                 // Si tu app de Node usa otro puerto (ej. 3000), cambia el primer 5000:
-                sh 'docker run -d --name $CONTAINER_NAME -p 5000:5000 $IMAGE_NAME'
-            }
+            sh 'docker run -d --name $CONTAINER_NAME -p 80:80 $IMAGE_NAME'            }
         }
 
         stage('Validar despliegue') {
