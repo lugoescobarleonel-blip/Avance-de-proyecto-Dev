@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    // Disparador para revisar cambios en GitHub cada 5 minutos
+    triggers {
+        pollSCM('*/5 * * * *')
+    }
+
     environment {
         IMAGE_NAME = "mi-proyecto-app"
         CONTAINER_NAME = "mi-contenedor-app"
@@ -9,8 +14,9 @@ pipeline {
     stages {
         stage('Limpieza de Disco') {
             steps {
-                // Previene el error de "espacio bajo" que vimos en tus capturas
+                // Mantiene el espacio libre para evitar que el nodo se ponga offline
                 sh 'docker image prune -f'
+                sh 'docker container prune -f'
             }
         }
 
@@ -30,7 +36,7 @@ pipeline {
             steps {
                 sh 'docker stop $CONTAINER_NAME || true'
                 sh 'docker rm $CONTAINER_NAME || true'
-                // Mapeo 80 de la instancia al 80 del contenedor (Nginx)
+                // Mapeo al puerto 80 para acceso directo vía IP
                 sh 'docker run -d --name $CONTAINER_NAME -p 80:80 $IMAGE_NAME'
             }
         }
@@ -39,7 +45,7 @@ pipeline {
             steps {
                 sh 'docker ps'
                 sleep 5
-                // Validamos contra el puerto 80 que es donde vive Nginx
+                // Verificación interna en el puerto 80
                 sh 'curl --max-time 5 http://localhost:80/ || true'
             }
         }
@@ -50,7 +56,7 @@ pipeline {
             echo '¡Despliegue automático exitoso! Revisa http://3.89.229.156'
         }
         failure {
-            echo 'El pipeline falló. Revisa el Console Output para ver si es falta de espacio.'
+            echo 'El pipeline falló. Revisa si el nodo sigue en línea o si falta espacio.'
         }
     }
 }
